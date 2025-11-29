@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
-import { Home, Search, Compass, Clapperboard, MessageCircle, Heart, PlusSquare, Menu } from 'lucide-vue-next';
+import { Link, router } from '@inertiajs/vue3';
+import { Home, Search, Compass, Clapperboard, MessageCircle, Heart, PlusSquare, Menu, Settings, LogOut } from 'lucide-vue-next';
+import { ref } from 'vue';
 
 const navItems = [
     { name: 'Home', icon: Home, href: '/feed', active: true },
@@ -12,6 +13,16 @@ const navItems = [
     { name: 'Create', icon: PlusSquare, href: '#' },
     { name: 'Profile', icon: null, href: '#', isProfile: true }, // Placeholder for profile image
 ];
+
+const showMoreMenu = ref(false);
+
+const toggleMoreMenu = () => {
+    showMoreMenu.value = !showMoreMenu.value;
+};
+
+const handleLogout = () => {
+    router.post('/logout');
+};
 </script>
 
 <template>
@@ -46,12 +57,40 @@ const navItems = [
             </template>
         </div>
 
-        <!-- More Menu -->
-        <div class="mt-auto">
-            <button class="flex items-center gap-4 p-3 w-full rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors group">
+        <!-- More Menu with Dropdown -->
+        <div class="mt-auto relative">
+            <button 
+                @click="toggleMoreMenu"
+                class="flex items-center gap-4 p-3 w-full rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors group"
+            >
                 <Menu :size="24" />
                 <span class="hidden xl:block text-base">More</span>
             </button>
+
+            <!-- Dropdown Menu -->
+            <div 
+                v-if="showMoreMenu"
+                class="absolute bottom-full left-0 mb-2 w-60 bg-white dark:bg-gray-900 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50"
+            >
+                <Link 
+                    href="#"
+                    class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                    @click="showMoreMenu = false"
+                >
+                    <Settings :size="20" />
+                    <span class="text-sm">Settings</span>
+                </Link>
+                
+                <div class="h-px bg-gray-200 dark:bg-gray-700 my-1"></div>
+                
+                <button 
+                    @click="handleLogout"
+                    class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors w-full text-left"
+                >
+                    <LogOut :size="20" />
+                    <span class="text-sm">Log out</span>
+                </button>
+            </div>
         </div>
     </div>
 </template>

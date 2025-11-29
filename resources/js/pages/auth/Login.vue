@@ -33,7 +33,7 @@ defineProps<{
                 <div class="flex flex-col gap-2">
                     <InstagramInput
                         name="email"
-                        type="email"
+                        type="text"
                         required
                         autofocus
                         placeholder="Phone number, username, or email"
