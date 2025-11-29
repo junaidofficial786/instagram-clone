@@ -45,6 +45,16 @@ import { Form, Link } from '@inertiajs/vue3';
 
                 <div class="flex flex-col gap-1">
                     <InstagramInput
+                        name="username"
+                        type="text"
+                        required
+                        placeholder="Username"
+                    />
+                    <div v-if="errors.username" class="text-red-500 text-xs">{{ errors.username }}</div>
+                </div>
+
+                <div class="flex flex-col gap-1">
+                    <InstagramInput
                         name="name"
                         type="text"
                         required
