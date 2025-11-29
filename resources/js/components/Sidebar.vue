@@ -11,7 +11,7 @@ const navItems = [
     { name: 'Messages', icon: MessageCircle, href: '#' },
     { name: 'Notifications', icon: Heart, href: '#' },
     { name: 'Create', icon: PlusSquare, href: '#' },
-    { name: 'Profile', icon: null, href: '#', isProfile: true }, // Placeholder for profile image
+    { name: 'Profile', icon: null, href: '/profile', isProfile: true },
 ];
 
 const showMoreMenu = ref(false);

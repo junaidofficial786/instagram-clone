@@ -14,6 +14,10 @@ Route::get('/feed', function () {
     return Inertia::render('Feed');
 })->middleware(['auth', 'verified'])->name('feed');
 
+Route::get('/profile', function () {
+    return Inertia::render('Profile');
+})->middleware(['auth', 'verified'])->name('profile');
+
 Route::redirect('/dashboard', '/feed');
 
 require __DIR__.'/settings.php';
