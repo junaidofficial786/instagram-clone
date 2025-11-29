@@ -1,10 +1,7 @@
 <script setup lang="ts">
-import InputError from '@/components/InputError.vue';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Spinner } from '@/components/ui/spinner';
-import AuthLayout from '@/layouts/AuthLayout.vue';
+import InstagramInput from '@/components/InstagramInput.vue';
+import InstagramButton from '@/components/InstagramButton.vue';
+import InstagramAuthLayout from '@/layouts/InstagramAuthLayout.vue';
 import { update } from '@/routes/password';
 import { Form, Head } from '@inertiajs/vue3';
 import { ref } from 'vue';
@@ -18,72 +15,61 @@ const inputEmail = ref(props.email);
 </script>
 
 <template>
-    <AuthLayout
-        title="Reset password"
-        description="Please enter your new password below"
-    >
-        <Head title="Reset password" />
+    <InstagramAuthLayout title="Reset password">
+        <!-- Main Card -->
+        <div class="bg-white dark:bg-black border border-gray-300 dark:border-gray-800 flex flex-col items-center p-8 pb-6 rounded-[1px]">
+            <h1 class="font-['Grand_Hotel'] text-5xl mb-8 mt-2 dark:text-white">Instagram</h1>
+            
+            <h4 class="font-semibold text-base mb-2 dark:text-white">Create A Strong Password</h4>
+            <p class="text-sm text-gray-500 text-center mb-6">
+                Your password must be at least 6 characters and should include a combination of numbers, letters and special characters.
+            </p>
 
-        <Form
-            v-bind="update.form()"
-            :transform="(data) => ({ ...data, token, email })"
-            :reset-on-success="['password', 'password_confirmation']"
-            v-slot="{ errors, processing }"
-        >
-            <div class="grid gap-6">
-                <div class="grid gap-2">
-                    <Label for="email">Email</Label>
-                    <Input
-                        id="email"
-                        type="email"
+            <Form
+                v-bind="update.form()"
+                :transform="(data) => ({ ...data, token, email })"
+                :reset-on-success="['password', 'password_confirmation']"
+                v-slot="{ errors, processing }"
+                class="w-full flex flex-col gap-3"
+            >
+                <div class="flex flex-col gap-1">
+                    <InstagramInput
                         name="email"
-                        autocomplete="email"
+                        type="email"
                         v-model="inputEmail"
-                        class="mt-1 block w-full"
                         readonly
+                        placeholder="Email"
+                        class="bg-gray-100 dark:bg-gray-800 text-gray-500"
                     />
-                    <InputError :message="errors.email" class="mt-2" />
+                    <div v-if="errors.email" class="text-red-500 text-xs">{{ errors.email }}</div>
                 </div>
 
-                <div class="grid gap-2">
-                    <Label for="password">Password</Label>
-                    <Input
-                        id="password"
-                        type="password"
+                <div class="flex flex-col gap-1">
+                    <InstagramInput
                         name="password"
-                        autocomplete="new-password"
-                        class="mt-1 block w-full"
-                        autofocus
-                        placeholder="Password"
-                    />
-                    <InputError :message="errors.password" />
-                </div>
-
-                <div class="grid gap-2">
-                    <Label for="password_confirmation">
-                        Confirm Password
-                    </Label>
-                    <Input
-                        id="password_confirmation"
                         type="password"
-                        name="password_confirmation"
-                        autocomplete="new-password"
-                        class="mt-1 block w-full"
-                        placeholder="Confirm password"
+                        required
+                        autofocus
+                        placeholder="New Password"
                     />
-                    <InputError :message="errors.password_confirmation" />
+                    <div v-if="errors.password" class="text-red-500 text-xs">{{ errors.password }}</div>
                 </div>
 
-                <Button
-                    type="submit"
-                    class="mt-4 w-full"
-                    :disabled="processing"
-                    data-test="reset-password-button"
-                >
-                    <Spinner v-if="processing" />
-                    Reset password
-                </Button>
-            </div>
-        </Form>
-    </AuthLayout>
+                <div class="flex flex-col gap-1">
+                    <InstagramInput
+                        name="password_confirmation"
+                        type="password"
+                        required
+                        placeholder="New Password Confirmation"
+                    />
+                    <div v-if="errors.password_confirmation" class="text-red-500 text-xs">{{ errors.password_confirmation }}</div>
+                </div>
+
+                <InstagramButton type="submit" :disabled="processing">
+                    Reset Password
+                </InstagramButton>
+            </Form>
+        </div>
+    </InstagramAuthLayout>
 </template>
+

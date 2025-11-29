@@ -1,16 +1,11 @@
 <script setup lang="ts">
-import InputError from '@/components/InputError.vue';
-import TextLink from '@/components/TextLink.vue';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Spinner } from '@/components/ui/spinner';
-import AuthBase from '@/layouts/AuthLayout.vue';
+import InstagramInput from '@/components/InstagramInput.vue';
+import InstagramButton from '@/components/InstagramButton.vue';
+import InstagramAuthLayout from '@/layouts/InstagramAuthLayout.vue';
 import { register } from '@/routes';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
-import { Form, Head } from '@inertiajs/vue3';
+import { Form, Link } from '@inertiajs/vue3';
 
 defineProps<{
     status?: string;
@@ -20,91 +15,86 @@ defineProps<{
 </script>
 
 <template>
-    <AuthBase
-        title="Log in to your account"
-        description="Enter your email and password below to log in"
-    >
-        <Head title="Log in" />
+    <InstagramAuthLayout title="Log in">
+        <!-- Main Card -->
+        <div class="bg-white dark:bg-black border border-gray-300 dark:border-gray-800 flex flex-col items-center p-8 pb-6 rounded-[1px]">
+            <h1 class="font-['Grand_Hotel'] text-5xl mb-8 mt-2 dark:text-white">Instagram</h1>
+            
+            <div v-if="status" class="mb-4 text-center text-sm font-medium text-green-600">
+                {{ status }}
+            </div>
 
-        <div
-            v-if="status"
-            class="mb-4 text-center text-sm font-medium text-green-600"
-        >
-            {{ status }}
-        </div>
-
-        <Form
-            v-bind="store.form()"
-            :reset-on-success="['password']"
-            v-slot="{ errors, processing }"
-            class="flex flex-col gap-6"
-        >
-            <div class="grid gap-6">
-                <div class="grid gap-2">
-                    <Label for="email">Email address</Label>
-                    <Input
-                        id="email"
-                        type="email"
+            <Form
+                v-bind="store.form()"
+                :reset-on-success="['password']"
+                v-slot="{ errors, processing }"
+                class="w-full flex flex-col gap-3"
+            >
+                <div class="flex flex-col gap-2">
+                    <InstagramInput
                         name="email"
+                        type="email"
                         required
                         autofocus
-                        :tabindex="1"
-                        autocomplete="email"
-                        placeholder="email@example.com"
+                        placeholder="Phone number, username, or email"
                     />
-                    <InputError :message="errors.email" />
+                    <div v-if="errors.email" class="text-red-500 text-xs">{{ errors.email }}</div>
                 </div>
 
-                <div class="grid gap-2">
-                    <div class="flex items-center justify-between">
-                        <Label for="password">Password</Label>
-                        <TextLink
-                            v-if="canResetPassword"
-                            :href="request()"
-                            class="text-sm"
-                            :tabindex="5"
-                        >
-                            Forgot password?
-                        </TextLink>
-                    </div>
-                    <Input
-                        id="password"
-                        type="password"
+                <div class="flex flex-col gap-2">
+                    <InstagramInput
                         name="password"
+                        type="password"
                         required
-                        :tabindex="2"
-                        autocomplete="current-password"
                         placeholder="Password"
                     />
-                    <InputError :message="errors.password" />
+                    <div v-if="errors.password" class="text-red-500 text-xs">{{ errors.password }}</div>
                 </div>
 
-                <div class="flex items-center justify-between">
-                    <Label for="remember" class="flex items-center space-x-3">
-                        <Checkbox id="remember" name="remember" :tabindex="3" />
-                        <span>Remember me</span>
-                    </Label>
-                </div>
-
-                <Button
-                    type="submit"
-                    class="mt-4 w-full"
-                    :tabindex="4"
-                    :disabled="processing"
-                    data-test="login-button"
-                >
-                    <Spinner v-if="processing" />
+                <InstagramButton type="submit" :disabled="processing" class="mt-1">
                     Log in
-                </Button>
-            </div>
+                </InstagramButton>
 
-            <div
-                class="text-center text-sm text-muted-foreground"
-                v-if="canRegister"
-            >
-                Don't have an account?
-                <TextLink :href="register()" :tabindex="5">Sign up</TextLink>
+                <div class="flex items-center gap-4 my-3 w-full">
+                    <div class="h-[1px] bg-gray-300 dark:bg-gray-700 flex-1"></div>
+                    <span class="text-xs font-semibold text-gray-500 uppercase">OR</span>
+                    <div class="h-[1px] bg-gray-300 dark:bg-gray-700 flex-1"></div>
+                </div>
+
+                <div class="flex justify-center">
+                    <button type="button" class="flex items-center gap-2 text-[#385185] font-semibold text-sm">
+                        <span class="text-xs">Log in with Facebook</span>
+                    </button>
+                </div>
+
+                <div class="flex justify-center mt-2" v-if="canResetPassword">
+                    <Link :href="request()" class="text-xs text-[#00376b]">
+                        Forgot password?
+                    </Link>
+                </div>
+            </Form>
+        </div>
+
+        <!-- Sign up Card -->
+        <div class="bg-white dark:bg-black border border-gray-300 dark:border-gray-800 p-5 text-center rounded-[1px]" v-if="canRegister">
+            <p class="text-sm text-gray-800 dark:text-gray-200">
+                Don't have an account? 
+                <Link :href="register()" class="text-[#0095f6] font-semibold">Sign up</Link>
+            </p>
+        </div>
+
+        <!-- Get the app -->
+        <div class="text-center space-y-4">
+            <p class="text-sm text-gray-800 dark:text-gray-200">Get the app.</p>
+            <div class="flex justify-center gap-2">
+                <div class="h-10 w-32 bg-black rounded border border-gray-700 flex items-center justify-center text-white text-xs">
+                    <span class="font-semibold">Google Play</span>
+                </div>
+                <div class="h-10 w-32 bg-black rounded border border-gray-700 flex items-center justify-center text-white text-xs">
+                    <span class="font-semibold">Microsoft</span>
+                </div>
             </div>
-        </Form>
-    </AuthBase>
+        </div>
+    </InstagramAuthLayout>
 </template>
+
