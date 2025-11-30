@@ -10,16 +10,9 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
-Route::get('/feed', function () {
-    $user = auth()->user();
-    return Inertia::render('Feed', [
-        'currentUser' => [
-            'username' => $user->username,
-            'name' => $user->name,
-            'avatar' => $user->avatar ? asset('storage/' . $user->avatar) : null,
-        ],
-    ]);
-})->middleware(['auth', 'verified'])->name('feed');
+Route::get('/feed', [\App\Http\Controllers\FeedController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('feed');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'show'])->name('profile');
