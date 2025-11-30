@@ -4,6 +4,7 @@ import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { router } from '@inertiajs/vue3';
 import UserAvatar from '@/components/UserAvatar.vue';
 import LikesModal from '@/components/LikesModal.vue';
+import CommentsModal from '@/components/CommentsModal.vue';
 import { formatDistanceToNow } from 'date-fns';
 import axios from 'axios';
 
@@ -46,6 +47,10 @@ const likesCount = ref(props.post.likes_count || 0);
 const showMenu = ref(false);
 const isDeleting = ref(false);
 const showLikesModal = ref(false);
+const showCommentsModal = ref(false);
+const commentsCount = ref(props.post.comments?.length || 0);
+const newComment = ref('');
+const isSubmittingComment = ref(false);
 
 const toggleLike = async () => {
     const previousState = isLiked.value;
@@ -114,6 +119,29 @@ const savePost = () => {
     // TODO: Implement save post functionality
     showMenu.value = false;
     alert('Save post feature coming soon!');
+};
+
+const submitComment = async () => {
+    if (!newComment.value.trim() || isSubmittingComment.value) return;
+    
+    isSubmittingComment.value = true;
+    try {
+        await axios.post(`/posts/${props.post.id}/comments`, {
+            content: newComment.value.trim(),
+        });
+        
+        newComment.value = '';
+        commentsCount.value++;
+    } catch (error) {
+        console.error('Failed to post comment:', error);
+        alert('Failed to post comment');
+    } finally {
+        isSubmittingComment.value = false;
+    }
+};
+
+const handleCommentAdded = () => {
+    commentsCount.value++;
 };
 
 // Close menu when clicking outside
@@ -211,21 +239,6 @@ const timeAgo = computed(() => {
         <!-- Image -->
         <div class="w-full aspect-square bg-gray-100 dark:bg-gray-900 overflow-hidden rounded-[4px] border border-gray-100 dark:border-gray-800">
             <img :src="postImage" :alt="post.caption" class="w-full h-full object-cover" />
-        </div>
-
-        <!-- Actions -->
-        <div class="flex items-center justify-between py-3 px-1">
-            <div class="flex items-center gap-4">
-                <button @click="toggleLike" class="hover:opacity-60 transition-opacity">
-                    <Heart :size="24" :class="{ 'fill-red-500 text-red-500': isLiked, 'text-black dark:text-white': !isLiked }" />
-                </button>
-                <button class="hover:opacity-60 transition-opacity text-black dark:text-white">
-                    <MessageCircle :size="24" class="-rotate-90" />
-                </button>
-                <button class="hover:opacity-60 transition-opacity text-black dark:text-white">
-                    <Send :size="24" />
-                </button>
-            </div>
             <button @click="toggleSave" class="hover:opacity-60 transition-opacity text-black dark:text-white">
                 <Bookmark :size="24" :class="{ 'fill-black dark:fill-white': isSaved }" />
             </button>
@@ -249,27 +262,58 @@ const timeAgo = computed(() => {
 
         <!-- Comments -->
         <div class="px-1 mb-2 flex flex-col gap-1">
-            <div v-for="comment in post.comments" :key="comment.id" class="flex items-start gap-2">
+            <div v-for="comment in post.comments.slice(0, 2)" :key="comment.id" class="flex items-start gap-2">
                 <span class="font-semibold text-sm whitespace-nowrap">{{ comment.user.username }}</span>
                 <span class="text-sm line-clamp-2">{{ comment.content }}</span>
             </div>
-            <button v-if="post.comments.length > 0" class="text-gray-500 text-sm cursor-pointer hover:text-gray-900 dark:hover:text-gray-300 text-left mt-1">
-                View all comments
+            <button 
+                v-if="commentsCount > 0" 
+                @click="showCommentsModal = true"
+                class="text-gray-500 text-sm cursor-pointer hover:text-gray-900 dark:hover:text-gray-300 text-left mt-1"
+            >
+                View all {{ commentsCount }} comments
             </button>
         </div>
 
-        <!-- Add Comment -->
-        <div class="px-1 flex items-center gap-2 mt-2">
-            <UserAvatar :user="$page.props.currentUser" size="sm" />
-            <input type="text" placeholder="Add a comment..." class="w-full bg-transparent text-sm border-none focus:ring-0 p-0 placeholder-gray-500" />
-            <button class="text-blue-500 font-semibold text-sm hover:text-blue-700 opacity-0 focus:opacity-100 transition-opacity">Post</button>
+        <!-- Time Ago -->
+        <div class="px-1 mb-2">
+            <span class="text-xs text-gray-500 uppercase">{{ timeAgo }}</span>
         </div>
+
+        <!-- Add Comment -->
+        <form @submit.prevent="submitComment" class="px-1 flex items-center gap-2 pt-2 border-t border-gray-200 dark:border-gray-800">
+            <input 
+                v-model="newComment"
+                type="text" 
+                placeholder="Add a comment..." 
+                class="flex-1 bg-transparent text-sm border-none focus:ring-0 p-0 placeholder-gray-500"
+                :disabled="isSubmittingComment"
+            />
+            <button 
+                type="submit"
+                :disabled="!newComment.trim() || isSubmittingComment"
+                class="text-blue-500 font-semibold text-sm hover:text-blue-700 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity"
+            >
+                Post
+            </button>
+        </form>
         
         <!-- Likes Modal -->
         <LikesModal 
             :show="showLikesModal" 
             :post-id="post.id" 
             @close="showLikesModal = false"
+        />
+        
+        <!-- Comments Modal -->
+        <CommentsModal 
+            :show="showCommentsModal" 
+            :post-id="post.id"
+            :post-image="postImage"
+            :post-caption="post.caption"
+            :post-user="post.user"
+            @close="showCommentsModal = false"
+            @comment-added="handleCommentAdded"
         />
     </article>
 </template>

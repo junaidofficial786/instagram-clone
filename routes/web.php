@@ -27,6 +27,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/posts/{post}/like', [\App\Http\Controllers\LikeController::class, 'store'])->name('posts.like');
     Route::delete('/posts/{post}/like', [\App\Http\Controllers\LikeController::class, 'destroy'])->name('posts.unlike');
     Route::get('/posts/{post}/likes', [\App\Http\Controllers\PostLikesController::class, 'index'])->name('posts.likes');
+    
+    // Comments
+    Route::get('/posts/{post}/comments', [\App\Http\Controllers\CommentController::class, 'index'])->name('posts.comments');
+    Route::post('/posts/{post}/comments', [\App\Http\Controllers\CommentController::class, 'store'])->name('posts.comments.store');
 });
 
 Route::redirect('/dashboard', '/feed');
