@@ -37,6 +37,10 @@ const loadMorePosts = async () => {
     }
 };
 
+const handlePostDeleted = (postId: number) => {
+    allPosts.value = allPosts.value.filter(post => post.id !== postId);
+};
+
 onMounted(() => {
     const observer = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
@@ -59,7 +63,12 @@ onMounted(() => {
         <StoryRail :current-user="currentUser" />
         
         <div class="flex flex-col gap-2">
-            <PostItem v-for="post in allPosts" :key="post.id" :post="post" />
+            <PostItem 
+                v-for="post in allPosts" 
+                :key="post.id" 
+                :post="post" 
+                @post-deleted="handlePostDeleted"
+            />
             
             <!-- Infinite Scroll Trigger & Loading Indicator -->
             <div ref="loadMoreTrigger" class="h-10 flex items-center justify-center my-4">

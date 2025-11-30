@@ -30,8 +30,8 @@ const stories = computed(() => [userStory.value, ...otherStories.value]);
 </script>
 
 <template>
-    <div class="flex gap-4 overflow-x-auto pb-4 mb-4 scrollbar-hide">
-        <div v-for="story in stories" :key="story.id" class="flex flex-col items-center gap-1 min-w-[66px] cursor-pointer">
+    <div class="flex gap-4 overflow-x-auto pb-4 mb-4 scrollbar-hide scroll-smooth">
+        <div v-for="story in stories" :key="story.id" class="flex flex-col items-center gap-1 flex-shrink-0 w-[66px] cursor-pointer">
             <div class="relative w-[66px] h-[66px]">
                 <div 
                     class="w-full h-full rounded-full p-[2px]"

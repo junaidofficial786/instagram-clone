@@ -58,8 +58,13 @@ const handleLogout = () => {
                     :class="{ 'font-bold': $page.url === item.href || ($page.url.startsWith(item.href) && item.href !== '/feed') }"
                 >
                     <div class="relative group-hover:scale-105 transition-transform duration-200">
-                        <component v-if="item.icon" :is="item.icon" :size="24" :stroke-width="item.active ? 3 : 2" />
-                        <div v-else-if="item.isProfile" class="w-6 h-6 rounded-full bg-gray-300 overflow-hidden border border-gray-300 dark:border-gray-600">
+                        <component 
+                            v-if="item.icon" 
+                            :is="item.icon" 
+                            :size="24" 
+                            :stroke-width="($page.url === item.href || ($page.url.startsWith(item.href) && item.href !== '/feed')) ? 2.5 : 2" 
+                        />
+                        <div v-else-if="item.isProfile" class="w-6 h-6 rounded-full bg-gray-300 overflow-hidden border-2" :class="$page.url === item.href ? 'border-black dark:border-white' : 'border-gray-300 dark:border-gray-600'">
                              <img 
                                 :src="$page.props.currentUser?.avatar || `https://ui-avatars.com/api/?name=${$page.props.currentUser?.username || 'User'}&background=random&size=100`" 
                                 alt="Profile" 

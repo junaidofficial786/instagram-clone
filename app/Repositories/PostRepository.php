@@ -13,6 +13,8 @@ class PostRepository implements PostRepositoryInterface
      */
     public function getFeedPosts(int $perPage = 10): LengthAwarePaginator
     {
+        $userId = auth()->id();
+
         return Post::with([
             'user',
             'images',
@@ -21,8 +23,14 @@ class PostRepository implements PostRepositoryInterface
             },
             'comments.user',
         ])
+            ->withCount('likes')
             ->latest()
-            ->paginate($perPage);
+            ->paginate($perPage)
+            ->through(function ($post) use ($userId) {
+                $post->is_liked_by_current_user = $post->isLikedBy($userId);
+                $post->is_own_post = $post->user_id === $userId;
+                return $post;
+            });
     }
 
     /**

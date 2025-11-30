@@ -45,4 +45,24 @@ class Post extends Model
     {
         return $this->hasMany(Comment::class);
     }
+
+    /**
+     * Get all likes for the post
+     */
+    public function likes(): MorphMany
+    {
+        return $this->morphMany(Like::class, 'likeable');
+    }
+
+    /**
+     * Check if post is liked by a specific user
+     */
+    public function isLikedBy(?int $userId): bool
+    {
+        if (!$userId) {
+            return false;
+        }
+
+        return $this->likes()->where('user_id', $userId)->exists();
+    }
 }
