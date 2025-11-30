@@ -41,20 +41,20 @@ defineProps<{
                     <Link 
                         v-if="user?.isOwnProfile"
                         href="/profile/edit"
-                        class="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 px-4 py-1.5 rounded-lg font-semibold text-sm transition-colors"
+                        class="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 px-4 py-1.5 rounded-lg font-semibold text-sm transition-colors whitespace-nowrap"
                     >
                         Edit profile
                     </Link>
                     <button 
                         v-else
-                        class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-1.5 rounded-lg font-semibold text-sm transition-colors"
+                        class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-1.5 rounded-lg font-semibold text-sm transition-colors whitespace-nowrap"
                     >
                         Follow
                     </button>
 
                     <button 
                         v-if="user?.isOwnProfile"
-                        class="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 px-4 py-1.5 rounded-lg font-semibold text-sm transition-colors"
+                        class="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 px-4 py-1.5 rounded-lg font-semibold text-sm transition-colors whitespace-nowrap"
                     >
                         View archive
                     </button>
