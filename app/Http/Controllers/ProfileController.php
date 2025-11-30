@@ -22,12 +22,17 @@ class ProfileController extends Controller
         $user = auth()->user();
 
         return Inertia::render('Profile', [
+            'currentUser' => [
+                'username' => $user->username,
+                'name' => $user->name,
+                'avatar' => $user->avatar ? asset('storage/'.$user->avatar) : null,
+            ],
             'user' => [
                 'id' => $user->id,
                 'username' => $user->username,
                 'name' => $user->name,
                 'email' => $user->email,
-                'avatar' => $user->avatar ? asset('storage/' . $user->avatar) : null,
+                'avatar' => $user->avatar ? asset('storage/'.$user->avatar) : null,
                 'bio' => $user->bio,
                 'website' => $user->website,
                 'gender' => $user->gender,
@@ -47,12 +52,17 @@ class ProfileController extends Controller
         $user = auth()->user();
 
         return Inertia::render('EditProfile', [
+            'currentUser' => [
+                'username' => $user->username,
+                'name' => $user->name,
+                'avatar' => $user->avatar ? asset('storage/'.$user->avatar) : null,
+            ],
             'user' => [
                 'id' => $user->id,
                 'username' => $user->username,
                 'name' => $user->name,
                 'email' => $user->email,
-                'avatar' => $user->avatar ? asset('storage/' . $user->avatar) : null,
+                'avatar' => $user->avatar ? asset('storage/'.$user->avatar) : null,
                 'bio' => $user->bio,
                 'website' => $user->website,
                 'gender' => $user->gender,

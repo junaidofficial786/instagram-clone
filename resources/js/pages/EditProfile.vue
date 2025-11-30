@@ -7,6 +7,11 @@ import AvatarUpload from '@/components/AvatarUpload.vue';
 import { ArrowLeft, Loader2 } from 'lucide-vue-next';
 
 const props = defineProps<{
+    currentUser: {
+        username: string;
+        name: string;
+        avatar?: string | null;
+    };
     user: {
         id: number;
         username: string;
@@ -52,7 +57,7 @@ const goBack = () => {
 </script>
 
 <template>
-    <InstagramLayout title="Edit Profile">
+    <InstagramLayout title="Edit Profile" :current-user="currentUser">
         <div class="max-w-2xl mx-auto py-8 px-4">
             <!-- Header -->
             <div class="flex items-center gap-4 mb-8">
