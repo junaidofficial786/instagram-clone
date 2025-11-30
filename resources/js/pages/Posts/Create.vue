@@ -43,7 +43,7 @@ const removeImage = () => {
 };
 
 const submit = () => {
-    form.post(route('posts.store'), {
+    form.post('/posts', {
         forceFormData: true,
     });
 };

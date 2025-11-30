@@ -51,6 +51,9 @@ class HandleInertiaRequests extends Middleware
                 'name' => $request->user()->name,
                 'avatar' => $request->user()->avatar ? asset('storage/'.$request->user()->avatar) : null,
             ] : null,
+            'ziggy' => fn () => [
+                'location' => $request->url(),
+            ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
     }
