@@ -12,8 +12,8 @@ defineProps<{
         postsCount: number;
         followersCount: number;
         followingCount: number;
-        isOwnProfile: boolean;
     };
+    isOwnProfile?: boolean;
 }>();
 </script>
 
@@ -39,7 +39,7 @@ defineProps<{
                     <h2 class="text-xl font-light">{{ user?.username || 'username' }}</h2>
                     
                     <Link 
-                        v-if="user?.isOwnProfile"
+                        v-if="isOwnProfile"
                         href="/profile/edit"
                         class="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 px-4 py-1.5 rounded-lg font-semibold text-sm transition-colors whitespace-nowrap"
                     >
@@ -53,14 +53,14 @@ defineProps<{
                     </button>
 
                     <button 
-                        v-if="user?.isOwnProfile"
+                        v-if="isOwnProfile"
                         class="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 px-4 py-1.5 rounded-lg font-semibold text-sm transition-colors whitespace-nowrap"
                     >
                         View archive
                     </button>
 
                     <button 
-                        v-if="user?.isOwnProfile"
+                        v-if="isOwnProfile"
                         class="hover:opacity-70 transition-opacity"
                     >
                         <Settings :size="24" />

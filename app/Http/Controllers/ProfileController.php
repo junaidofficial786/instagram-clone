@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateProfileRequest;
+use App\Models\User;
 use App\Services\ProfileService;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -15,18 +16,13 @@ class ProfileController extends Controller
     ) {}
 
     /**
-     * Display the user's profile
+     * Display the authenticated user's profile
      */
-    public function show(): Response
+    public function index(): Response
     {
         $user = auth()->user();
 
         return Inertia::render('Profile', [
-            'currentUser' => [
-                'username' => $user->username,
-                'name' => $user->name,
-                'avatar' => $user->avatar ? asset('storage/'.$user->avatar) : null,
-            ],
             'user' => [
                 'id' => $user->id,
                 'username' => $user->username,
@@ -36,11 +32,34 @@ class ProfileController extends Controller
                 'bio' => $user->bio,
                 'website' => $user->website,
                 'gender' => $user->gender,
-                'postsCount' => 0, // Placeholder - will be implemented with posts feature
-                'followersCount' => 0, // Placeholder - will be implemented with follows feature
-                'followingCount' => 0, // Placeholder - will be implemented with follows feature
-                'isOwnProfile' => true,
+                'postsCount' => 0,
+                'followersCount' => 0,
+                'followingCount' => 0,
             ],
+            'isOwnProfile' => true,
+        ]);
+    }
+
+    /**
+     * Display a specific user's profile by username
+     */
+    public function show(string $username): Response
+    {
+        $user = User::where('username', $username)->firstOrFail();
+        
+        return Inertia::render('Profile', [
+            'user' => [
+                'id' => $user->id,
+                'username' => $user->username,
+                'name' => $user->name,
+                'avatar' => $user->avatar ? asset('storage/'.$user->avatar) : null,
+                'bio' => $user->bio,
+                'website' => $user->website,
+                'postsCount' => 0,
+                'followersCount' => 0,
+                'followingCount' => 0,
+            ],
+            'isOwnProfile' => auth()->id() === $user->id,
         ]);
     }
 
@@ -52,11 +71,6 @@ class ProfileController extends Controller
         $user = auth()->user();
 
         return Inertia::render('EditProfile', [
-            'currentUser' => [
-                'username' => $user->username,
-                'name' => $user->name,
-                'avatar' => $user->avatar ? asset('storage/'.$user->avatar) : null,
-            ],
             'user' => [
                 'id' => $user->id,
                 'username' => $user->username,

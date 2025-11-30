@@ -5,25 +5,18 @@ import PostsGrid from '@/components/PostsGrid.vue';
 import { ref } from 'vue';
 
 const props = defineProps<{
-    currentUser: {
-        username: string;
-        name: string;
-        avatar?: string | null;
-    };
     user: {
         id: number;
         username: string;
         name: string;
-        email: string;
         avatar?: string | null;
         bio?: string | null;
         website?: string | null;
-        gender?: string | null;
         postsCount: number;
         followersCount: number;
         followingCount: number;
-        isOwnProfile: boolean;
     };
+    isOwnProfile: boolean;
 }>();
 
 const posts = ref([
@@ -67,10 +60,10 @@ const posts = ref([
 </script>
 
 <template>
-    <InstagramLayout title="Profile" :current-user="currentUser">
+    <InstagramLayout title="Profile">
         <div class="max-w-4xl mx-auto">
-            <ProfileHeader :user="user" />
-            <PostsGrid :posts="posts" />
+            <ProfileHeader :user="user" :is-own-profile="isOwnProfile" />
+            <PostsGrid :posts="posts" :is-own-profile="isOwnProfile" />
         </div>
     </InstagramLayout>
 </template>

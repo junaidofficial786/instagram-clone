@@ -14,8 +14,9 @@ Route::get('/feed', [\App\Http\Controllers\FeedController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('feed');
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'show'])->name('profile');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('profile');
+    Route::get('/profile/{username}', [App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile/edit', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile/update', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile/avatar', [App\Http\Controllers\ProfileController::class, 'deleteAvatar'])->name('profile.avatar.delete');
@@ -25,6 +26,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Likes
     Route::post('/posts/{post}/like', [\App\Http\Controllers\LikeController::class, 'store'])->name('posts.like');
     Route::delete('/posts/{post}/like', [\App\Http\Controllers\LikeController::class, 'destroy'])->name('posts.unlike');
+    Route::get('/posts/{post}/likes', [\App\Http\Controllers\PostLikesController::class, 'index'])->name('posts.likes');
 });
 
 Route::redirect('/dashboard', '/feed');

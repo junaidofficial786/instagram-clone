@@ -3,6 +3,7 @@ import { Heart, MessageCircle, Send, Bookmark, MoreHorizontal, Trash2, Link as L
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { router } from '@inertiajs/vue3';
 import UserAvatar from '@/components/UserAvatar.vue';
+import LikesModal from '@/components/LikesModal.vue';
 import { formatDistanceToNow } from 'date-fns';
 import axios from 'axios';
 
@@ -44,6 +45,7 @@ const isSaved = ref(false);
 const likesCount = ref(props.post.likes_count || 0);
 const showMenu = ref(false);
 const isDeleting = ref(false);
+const showLikesModal = ref(false);
 
 const toggleLike = async () => {
     const previousState = isLiked.value;
@@ -231,7 +233,12 @@ const timeAgo = computed(() => {
 
         <!-- Likes -->
         <div class="px-1 mb-2">
-            <span class="font-semibold text-sm">{{ likesCount.toLocaleString() }} likes</span>
+            <button 
+                @click="showLikesModal = true"
+                class="font-semibold text-sm hover:opacity-70 transition-opacity"
+            >
+                {{ likesCount.toLocaleString() }} likes
+            </button>
         </div>
 
         <!-- Caption -->
@@ -257,5 +264,12 @@ const timeAgo = computed(() => {
             <input type="text" placeholder="Add a comment..." class="w-full bg-transparent text-sm border-none focus:ring-0 p-0 placeholder-gray-500" />
             <button class="text-blue-500 font-semibold text-sm hover:text-blue-700 opacity-0 focus:opacity-100 transition-opacity">Post</button>
         </div>
+        
+        <!-- Likes Modal -->
+        <LikesModal 
+            :show="showLikesModal" 
+            :post-id="post.id" 
+            @close="showLikesModal = false"
+        />
     </article>
 </template>

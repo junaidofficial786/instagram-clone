@@ -9,6 +9,7 @@ defineProps<{
         likes: number;
         comments: number;
     }>;
+    isOwnProfile?: boolean;
 }>();
 
 const activeTab = ref('posts');
@@ -27,6 +28,7 @@ const activeTab = ref('posts');
                 <span class="text-xs uppercase tracking-wider">Posts</span>
             </button>
             <button 
+                v-if="isOwnProfile"
                 @click="activeTab = 'saved'"
                 class="flex items-center gap-2 py-3 border-t border-transparent -mt-px transition-colors"
                 :class="activeTab === 'saved' ? 'border-black dark:border-white font-semibold' : 'text-gray-500'"
@@ -35,6 +37,7 @@ const activeTab = ref('posts');
                 <span class="text-xs uppercase tracking-wider">Saved</span>
             </button>
             <button 
+                v-if="isOwnProfile"
                 @click="activeTab = 'tagged'"
                 class="flex items-center gap-2 py-3 border-t border-transparent -mt-px transition-colors"
                 :class="activeTab === 'tagged' ? 'border-black dark:border-white font-semibold' : 'text-gray-500'"
