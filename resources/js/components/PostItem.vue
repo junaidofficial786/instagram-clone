@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Heart, MessageCircle, Send, Bookmark, MoreHorizontal } from 'lucide-vue-next';
 import { ref, computed } from 'vue';
-import UserAvatar from '@/Components/UserAvatar.vue';
+import UserAvatar from '@/components/UserAvatar.vue';
 import { formatDistanceToNow } from 'date-fns';
 
 const props = defineProps<{
@@ -13,6 +13,7 @@ const props = defineProps<{
             avatar?: string | null;
         };
         caption: string;
+        location?: string | null;
         created_at: string;
         images: Array<{
             url: string;
@@ -66,9 +67,12 @@ const timeAgo = computed(() => {
                 <div class="cursor-pointer ring-2 ring-transparent hover:ring-gray-300 transition-all rounded-full">
                     <UserAvatar :user="post.user" size="md" />
                 </div>
-                <div class="flex items-center gap-2">
-                    <span class="font-semibold text-sm cursor-pointer hover:opacity-70">{{ post.user.username }}</span>
-                    <span class="text-gray-500 text-xs">• {{ timeAgo }}</span>
+                <div class="flex flex-col">
+                    <div class="flex items-center gap-2">
+                        <span class="font-semibold text-sm cursor-pointer hover:opacity-70">{{ post.user.username }}</span>
+                        <span class="text-gray-500 text-xs">• {{ timeAgo }}</span>
+                    </div>
+                    <span v-if="post.location" class="text-xs text-gray-500">{{ post.location }}</span>
                 </div>
             </div>
             <button class="text-gray-900 dark:text-white hover:opacity-60">

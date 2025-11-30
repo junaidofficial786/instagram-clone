@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import InstagramLayout from '@/Layouts/InstagramLayout.vue';
-import StoryRail from '@/Components/StoryRail.vue';
-import PostItem from '@/Components/PostItem.vue';
+import InstagramLayout from '@/layouts/InstagramLayout.vue';
+import StoryRail from '@/components/StoryRail.vue';
+import PostItem from '@/components/PostItem.vue';
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 

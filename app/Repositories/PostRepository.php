@@ -19,9 +19,39 @@ class PostRepository implements PostRepositoryInterface
             'comments' => function ($query) {
                 $query->latest()->limit(3); // Get only recent 3 comments for preview
             },
-            'comments.user'
+            'comments.user',
         ])
-        ->latest()
-        ->paginate($perPage);
+            ->latest()
+            ->paginate($perPage);
+    }
+
+    /**
+     * Create a new post
+     */
+    public function createPost(array $data): Post
+    {
+        return \Illuminate\Support\Facades\DB::transaction(function () use ($data) {
+            $post = Post::create([
+                'user_id' => auth()->id(),
+                'caption' => $data['caption'] ?? null,
+                'location' => $data['location'] ?? null,
+                'hide_likes' => false,
+                'hide_comments' => false,
+            ]);
+
+            if (isset($data['images'])) {
+                foreach ($data['images'] as $index => $imageFile) {
+                    $path = $imageFile->store('posts', 'public');
+
+                    $post->images()->create([
+                        'url' => $path,
+                        'type' => 'image',
+                        'order' => $index,
+                    ]);
+                }
+            }
+
+            return $post;
+        });
     }
 }

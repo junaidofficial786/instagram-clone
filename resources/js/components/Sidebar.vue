@@ -3,22 +3,26 @@ import { Link, router } from '@inertiajs/vue3';
 import { Home, Search, Compass, Clapperboard, MessageCircle, Heart, PlusSquare, Menu, Settings, LogOut } from 'lucide-vue-next';
 import { ref } from 'vue';
 
-defineProps<{
-    currentUser?: {
-        username: string;
-        name: string;
-        avatar?: string | null;
-    };
-}>();
+import { FunctionalComponent } from 'vue';
 
-const navItems = [
-    { name: 'Home', icon: Home, href: '/feed', active: true },
+defineProps<{}>();
+
+interface NavItem {
+    name: string;
+    icon: FunctionalComponent | null;
+    href: string;
+    active?: boolean;
+    isProfile?: boolean;
+}
+
+const navItems: NavItem[] = [
+    { name: 'Home', icon: Home, href: '/feed' },
     { name: 'Search', icon: Search, href: '#' },
     { name: 'Explore', icon: Compass, href: '#' },
     { name: 'Reels', icon: Clapperboard, href: '#' },
     { name: 'Messages', icon: MessageCircle, href: '#' },
     { name: 'Notifications', icon: Heart, href: '#' },
-    { name: 'Create', icon: PlusSquare, href: '#' },
+    { name: 'Create', icon: PlusSquare, href: '/posts/create' },
     { name: 'Profile', icon: null, href: '/profile', isProfile: true },
 ];
 
@@ -51,19 +55,19 @@ const handleLogout = () => {
                 <Link
                     :href="item.href"
                     class="flex items-center gap-4 p-3 my-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors group"
-                    :class="{ 'font-bold': item.active }"
+                    :class="{ 'font-bold': $page.url === item.href || ($page.url.startsWith(item.href) && item.href !== '/feed') }"
                 >
                     <div class="relative group-hover:scale-105 transition-transform duration-200">
                         <component v-if="item.icon" :is="item.icon" :size="24" :stroke-width="item.active ? 3 : 2" />
                         <div v-else-if="item.isProfile" class="w-6 h-6 rounded-full bg-gray-300 overflow-hidden border border-gray-300 dark:border-gray-600">
                              <img 
-                                :src="currentUser?.avatar || `https://ui-avatars.com/api/?name=${currentUser?.username || 'User'}&background=random&size=100`" 
+                                :src="$page.props.currentUser?.avatar || `https://ui-avatars.com/api/?name=${$page.props.currentUser?.username || 'User'}&background=random&size=100`" 
                                 alt="Profile" 
                                 class="w-full h-full object-cover" 
                             />
                         </div>
                     </div>
-                    <span class="hidden xl:block text-base">{{ item.isProfile && currentUser?.username ? currentUser.username : item.name }}</span>
+                    <span class="hidden xl:block text-base">{{ item.isProfile && $page.props.currentUser?.username ? $page.props.currentUser.username : item.name }}</span>
                 </Link>
             </template>
         </div>

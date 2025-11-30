@@ -45,6 +45,12 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+            'currentUser' => $request->user() ? [
+                'id' => $request->user()->id,
+                'username' => $request->user()->username,
+                'name' => $request->user()->name,
+                'avatar' => $request->user()->avatar ? asset('storage/'.$request->user()->avatar) : null,
+            ] : null,
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
     }

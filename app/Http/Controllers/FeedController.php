@@ -26,11 +26,6 @@ class FeedController extends Controller
         }
 
         return Inertia::render('Feed', [
-            'currentUser' => [
-                'username' => $user->username,
-                'name' => $user->name,
-                'avatar' => $user->avatar ? asset('storage/' . $user->avatar) : null,
-            ],
             'posts' => $posts,
         ]);
     }

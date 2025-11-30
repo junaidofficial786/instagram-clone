@@ -1,15 +1,10 @@
 <script setup lang="ts">
-import Sidebar from '@/Components/Sidebar.vue';
-import RightSidebar from '@/Components/RightSidebar.vue';
+import Sidebar from '@/components/Sidebar.vue';
+import RightSidebar from '@/components/RightSidebar.vue';
 import { Head } from '@inertiajs/vue3';
 
 defineProps<{
     title?: string;
-    currentUser?: {
-        username: string;
-        name: string;
-        avatar?: string | null;
-    };
 }>();
 </script>
 
@@ -18,7 +13,7 @@ defineProps<{
 
     <div class="flex min-h-screen bg-white dark:bg-black text-black dark:text-white">
         <!-- Left Sidebar -->
-        <Sidebar :current-user="currentUser" class="hidden md:flex w-[72px] xl:w-[244px] flex-col fixed h-screen border-r border-gray-100 dark:border-gray-800 z-50 bg-white dark:bg-black" />
+        <Sidebar class="hidden md:flex w-[72px] xl:w-[244px] flex-col fixed h-screen border-r border-gray-100 dark:border-gray-800 z-50 bg-white dark:bg-black" />
 
         <!-- Main Content -->
         <main class="flex-1 flex justify-center w-full md:pl-[72px] xl:pl-[244px]">
@@ -29,7 +24,7 @@ defineProps<{
 
         <!-- Right Sidebar (Hidden on smaller screens) -->
         <div class="hidden lg:block w-[380px] pl-16 pt-8 pr-4">
-            <RightSidebar :current-user="currentUser" />
+            <RightSidebar />
         </div>
 
         <!-- Mobile Bottom Nav (Visible only on small screens) -->
