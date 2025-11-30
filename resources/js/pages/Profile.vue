@@ -4,17 +4,22 @@ import ProfileHeader from '@/components/ProfileHeader.vue';
 import PostsGrid from '@/components/PostsGrid.vue';
 import { ref } from 'vue';
 
-const user = ref({
-    username: 'johndoe',
-    name: 'John Doe',
-    avatar: 'https://ui-avatars.com/api/?name=John+Doe&background=random&size=150',
-    bio: 'Web Developer | Coffee Enthusiast ☕\nLiving life one commit at a time 💻',
-    website: 'https://johndoe.com',
-    postsCount: 42,
-    followersCount: 1234,
-    followingCount: 567,
-    isOwnProfile: true
-});
+const props = defineProps<{
+    user: {
+        id: number;
+        username: string;
+        name: string;
+        email: string;
+        avatar?: string | null;
+        bio?: string | null;
+        website?: string | null;
+        gender?: string | null;
+        postsCount: number;
+        followersCount: number;
+        followingCount: number;
+        isOwnProfile: boolean;
+    };
+}>();
 
 const posts = ref([
     {

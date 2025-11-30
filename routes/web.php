@@ -14,9 +14,12 @@ Route::get('/feed', function () {
     return Inertia::render('Feed');
 })->middleware(['auth', 'verified'])->name('feed');
 
-Route::get('/profile', function () {
-    return Inertia::render('Profile');
-})->middleware(['auth', 'verified'])->name('profile');
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'show'])->name('profile');
+    Route::get('/profile/edit', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile/update', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile/avatar', [App\Http\Controllers\ProfileController::class, 'deleteAvatar'])->name('profile.avatar.delete');
+});
 
 Route::redirect('/dashboard', '/feed');
 

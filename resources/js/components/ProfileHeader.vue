@@ -6,9 +6,9 @@ defineProps<{
     user?: {
         username: string;
         name: string;
-        avatar?: string;
-        bio?: string;
-        website?: string;
+        avatar?: string | null;
+        bio?: string | null;
+        website?: string | null;
         postsCount: number;
         followersCount: number;
         followingCount: number;
@@ -38,12 +38,13 @@ defineProps<{
                 <div class="flex items-center gap-4 mb-5">
                     <h2 class="text-xl font-light">{{ user?.username || 'username' }}</h2>
                     
-                    <button 
+                    <Link 
                         v-if="user?.isOwnProfile"
+                        href="/profile/edit"
                         class="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 px-4 py-1.5 rounded-lg font-semibold text-sm transition-colors"
                     >
                         Edit profile
-                    </button>
+                    </Link>
                     <button 
                         v-else
                         class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-1.5 rounded-lg font-semibold text-sm transition-colors"
