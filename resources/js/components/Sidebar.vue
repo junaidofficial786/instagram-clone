@@ -3,6 +3,14 @@ import { Link, router } from '@inertiajs/vue3';
 import { Home, Search, Compass, Clapperboard, MessageCircle, Heart, PlusSquare, Menu, Settings, LogOut } from 'lucide-vue-next';
 import { ref } from 'vue';
 
+defineProps<{
+    currentUser?: {
+        username: string;
+        name: string;
+        avatar?: string | null;
+    };
+}>();
+
 const navItems = [
     { name: 'Home', icon: Home, href: '/feed', active: true },
     { name: 'Search', icon: Search, href: '#' },
@@ -47,12 +55,15 @@ const handleLogout = () => {
                 >
                     <div class="relative group-hover:scale-105 transition-transform duration-200">
                         <component v-if="item.icon" :is="item.icon" :size="24" :stroke-width="item.active ? 3 : 2" />
-                        <div v-else-if="item.isProfile" class="w-6 h-6 rounded-full bg-gray-300 overflow-hidden">
-                             <!-- Placeholder for profile image -->
-                             <img src="https://ui-avatars.com/api/?name=User&background=random" alt="Profile" class="w-full h-full object-cover" />
+                        <div v-else-if="item.isProfile" class="w-6 h-6 rounded-full bg-gray-300 overflow-hidden border border-gray-300 dark:border-gray-600">
+                             <img 
+                                :src="currentUser?.avatar || `https://ui-avatars.com/api/?name=${currentUser?.username || 'User'}&background=random&size=100`" 
+                                alt="Profile" 
+                                class="w-full h-full object-cover" 
+                            />
                         </div>
                     </div>
-                    <span class="hidden xl:block text-base">{{ item.name }}</span>
+                    <span class="hidden xl:block text-base">{{ item.isProfile && currentUser?.username ? currentUser.username : item.name }}</span>
                 </Link>
             </template>
         </div>

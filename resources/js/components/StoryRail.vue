@@ -1,8 +1,15 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
-const stories = ref([
-    { id: 1, username: 'your_story', image: 'https://ui-avatars.com/api/?name=Me&background=random', isUser: true },
+const props = defineProps<{
+    currentUser?: {
+        username: string;
+        name: string;
+        avatar?: string | null;
+    };
+}>();
+
+const otherStories = ref([
     { id: 2, username: 'user_one', image: 'https://ui-avatars.com/api/?name=User+One&background=random', hasStory: true },
     { id: 3, username: 'user_two', image: 'https://ui-avatars.com/api/?name=User+Two&background=random', hasStory: true },
     { id: 4, username: 'user_three', image: 'https://ui-avatars.com/api/?name=User+Three&background=random', hasStory: true },
@@ -11,6 +18,15 @@ const stories = ref([
     { id: 7, username: 'user_six', image: 'https://ui-avatars.com/api/?name=User+Six&background=random', hasStory: true },
     { id: 8, username: 'user_seven', image: 'https://ui-avatars.com/api/?name=User+Seven&background=random', hasStory: true },
 ]);
+
+const userStory = computed(() => ({
+    id: 1,
+    username: props.currentUser?.username || 'your_story',
+    image: props.currentUser?.avatar || `https://ui-avatars.com/api/?name=${props.currentUser?.username || 'Me'}&background=random&size=100`,
+    isUser: true
+}));
+
+const stories = computed(() => [userStory.value, ...otherStories.value]);
 </script>
 
 <template>

@@ -4,6 +4,14 @@ import StoryRail from '@/Components/StoryRail.vue';
 import PostItem from '@/Components/PostItem.vue';
 import { ref } from 'vue';
 
+defineProps<{
+    currentUser: {
+        username: string;
+        name: string;
+        avatar?: string | null;
+    };
+}>();
+
 const posts = ref([
     {
         id: 1,
@@ -39,8 +47,8 @@ const posts = ref([
 </script>
 
 <template>
-    <InstagramLayout title="Feed">
-        <StoryRail />
+    <InstagramLayout title="Feed" :current-user="currentUser">
+        <StoryRail :current-user="currentUser" />
         
         <div class="flex flex-col gap-2">
             <PostItem v-for="post in posts" :key="post.id" :post="post" />

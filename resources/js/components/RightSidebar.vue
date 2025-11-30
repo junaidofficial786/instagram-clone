@@ -1,6 +1,14 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
 
+defineProps<{
+    currentUser?: {
+        username: string;
+        name: string;
+        avatar?: string | null;
+    };
+}>();
+
 const suggestions = [
     { id: 1, username: 'suggested_user_1', subtitle: 'New to Instagram' },
     { id: 2, username: 'suggested_user_2', subtitle: 'Followed by user_3' },
@@ -16,11 +24,15 @@ const suggestions = [
         <div class="flex items-center justify-between mb-2">
             <div class="flex items-center gap-3">
                 <div class="w-11 h-11 rounded-full bg-gray-200 overflow-hidden">
-                    <img src="https://ui-avatars.com/api/?name=Current+User&background=random" alt="Profile" class="w-full h-full object-cover" />
+                    <img 
+                        :src="currentUser?.avatar || `https://ui-avatars.com/api/?name=${currentUser?.username || 'User'}&background=random&size=100`" 
+                        alt="Profile" 
+                        class="w-full h-full object-cover" 
+                    />
                 </div>
                 <div class="flex flex-col">
-                    <span class="font-semibold text-sm">current_user</span>
-                    <span class="text-gray-500 text-sm">Current User</span>
+                    <span class="font-semibold text-sm">{{ currentUser?.username || 'current_user' }}</span>
+                    <span class="text-gray-500 text-sm">{{ currentUser?.name || 'Current User' }}</span>
                 </div>
             </div>
             <Link href="#" class="text-xs font-semibold text-blue-500 hover:text-blue-700">Switch</Link>
