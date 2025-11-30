@@ -16,15 +16,14 @@ class FeedController extends Controller
     /**
      * Display the feed.
      */
-    public function index(Request $request): Response
+    public function index(Request $request): Response|\Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        $posts = $this->postRepository->getFeedPosts();
+        $posts = $this->postRepository->getFeedPosts(7);
 
-        // Transform posts for frontend if needed, or pass as is if models are sufficient
-        // We'll pass them and let Inertia/Vue handle the structure, 
-        // but we might need to map them to match the exact expected prop structure if we don't change Vue enough.
-        // For now, let's pass the paginated object.
+        if ($request->wantsJson() && !$request->inertia()) {
+            return response()->json($posts);
+        }
 
         return Inertia::render('Feed', [
             'currentUser' => [
